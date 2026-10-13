@@ -1,0 +1,67 @@
+study_id	sample_label	input_type	input_file	sra_run_accession	used_in_notebook_test	metadata_status
+lau	Control	FASTQ	1LAU/fastq/SRR10947151.fastq.gz	SRR10947151	yes	notebook_only
+lau	OL_1	FASTQ	1LAU/fastq/SRR10947114.fastq.gz	SRR10947114	yes	notebook_only
+lau	OL_2	FASTQ	1LAU/fastq/SRR10947113.fastq.gz	SRR10947113	no	notebook_only
+lin	T0_Screen3_C	FASTQ	2LIN/fastq/SRR26388029.fastq.gz	SRR26388029	no	notebook_only
+lin	T0_Screen3_B	FASTQ	2LIN/fastq/SRR26388030.fastq.gz	SRR26388030	no	notebook_only
+lin	T0_Screen3_A	FASTQ	2LIN/fastq/SRR26388031.fastq.gz	SRR26388031	no	notebook_only
+lin	T9_OLA_B	FASTQ	2LIN/fastq/SRR26388023.fastq.gz	SRR26388023	yes	notebook_only
+lin	T9_OLA_A	FASTQ	2LIN/fastq/SRR26388024.fastq.gz	SRR26388024	yes	notebook_only
+lin	T9_DMSO3_B	FASTQ	2LIN/fastq/SRR26388027.fastq.gz	SRR26388027	yes	notebook_only
+lin	T9_DMSO3_A	FASTQ	2LIN/fastq/SRR26388028.fastq.gz	SRR26388028	yes	notebook_only
+lin	T12_OLA_C	FASTQ	2LIN/fastq/SRR26388118.fastq.gz	SRR26388118	yes	notebook_only
+lin	T12_OLA_B	FASTQ	2LIN/fastq/SRR26388119.fastq.gz	SRR26388119	yes	notebook_only
+lin	T12_OLA_A	FASTQ	2LIN/fastq/SRR26388120.fastq.gz	SRR26388120	yes	notebook_only
+lin	T12_DMSO3_C	FASTQ	2LIN/fastq/SRR26388124.fastq.gz	SRR26388124	yes	notebook_only
+lin	T12_DMSO3_B	FASTQ	2LIN/fastq/SRR26388125.fastq.gz	SRR26388125	yes	notebook_only
+lin	T12_DMSO3_A	FASTQ	2LIN/fastq/SRR26388126.fastq.gz	SRR26388126	yes	notebook_only
+lin	T15_OLA_C	FASTQ	2LIN/fastq/SRR26388104.fastq.gz	SRR26388104	yes	notebook_only
+lin	T15_OLA_B	FASTQ	2LIN/fastq/SRR26388105.fastq.gz	SRR26388105	yes	notebook_only
+lin	T15_OLA_A	FASTQ	2LIN/fastq/SRR26388107.fastq.gz	SRR26388107	yes	notebook_only
+lin	T15_DMSO3_C	FASTQ	2LIN/fastq/SRR26388111.fastq.gz	SRR26388111	yes	notebook_only
+lin	T15_DMSO3_B	FASTQ	2LIN/fastq/SRR26388112.fastq.gz	SRR26388112	yes	notebook_only
+lin	T15_DMSO3_A	FASTQ	2LIN/fastq/SRR26388113.fastq.gz	SRR26388113	yes	notebook_only
+lin	T18_OLA_C	FASTQ	2LIN/fastq/SRR26388097.fastq.gz	SRR26388097	yes	notebook_only
+lin	T18_OLA_B	FASTQ	2LIN/fastq/SRR26388098.fastq.gz	SRR26388098	yes	notebook_only
+lin	T18_OLA_A	FASTQ	2LIN/fastq/SRR26388099.fastq.gz	SRR26388099	yes	notebook_only
+lin	T18_DMSO3_C	FASTQ	2LIN/fastq/SRR26388071.fastq.gz	SRR26388071	yes	notebook_only
+lin	T18_DMSO3_B	FASTQ	2LIN/fastq/SRR26388072.fastq.gz	SRR26388072	yes	notebook_only
+lin	T18_DMSO3_A	FASTQ	2LIN/fastq/SRR26388073.fastq.gz	SRR26388073	yes	notebook_only
+juhasz	A_OL_1	FASTQ	4JUHASZ/fastq/SRR11144451.fastq.gz	SRR11144451	yes	notebook_only
+juhasz	A_OL_2	FASTQ	4JUHASZ/fastq/SRR11144452.fastq.gz	SRR11144452	yes	notebook_only
+juhasz	A_DMSO_1	FASTQ	4JUHASZ/fastq/SRR11144453.fastq.gz	SRR11144453	yes	notebook_only
+juhasz	A_DMSO_2	FASTQ	4JUHASZ/fastq/SRR11144450.fastq.gz	SRR11144450	yes	notebook_only
+juhasz	B_OL_1	FASTQ	4JUHASZ/fastq/SRR11144455.fastq.gz	SRR11144455	yes	notebook_only
+juhasz	B_OL_2	FASTQ	4JUHASZ/fastq/SRR11144456.fastq.gz	SRR11144456	yes	notebook_only
+juhasz	B_DMSO_1	FASTQ	4JUHASZ/fastq/SRR11144457.fastq.gz	SRR11144457	yes	notebook_only
+juhasz	B_DMSO_2	FASTQ	4JUHASZ/fastq/SRR11144458.fastq.gz	SRR11144458	yes	notebook_only
+tuano	HMLE_OL_1	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	HMLE_OL_2	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	HMLE_DMSO_1	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	HMLE_DMSO_2	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	mesHMLE_OL_1	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	mesHMLE_OL_2	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	mesHMLE_DMSO_1	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	mesHMLE_DMSO_2	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	B80_T17_OL_1	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	B80_T17_OL_2	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	B80_T17_DMSO_1	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	B80_T17_DMSO_2	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	B80_T5_OL_1	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	B80_T5_OL_2	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	B80_T5_DMSO_1	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	B80_T5_DMSO_2	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	K5+/K19-_OL_1	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	K5+/K19-_OL_2	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	K5+/K19-_DMSO_1	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+tuano	K5+/K19-_DMSO_2	count_table_column	3TUANO/tuano_count_edited.txt		yes	notebook_only
+fang	Olap_5.1	count_table_column	5FANG/count/all.count.txt		yes	notebook_only
+fang	Olap_5.2	count_table_column	5FANG/count/all.count.txt		yes	notebook_only
+fang	DMSO.1	count_table_column	5FANG/count/all.count.txt		yes	notebook_only
+fang	DMSO.2	count_table_column	5FANG/count/all.count.txt		yes	notebook_only
+fang	Olap_10.1	count_table_column	5FANG/count/all.count.txt		yes	notebook_only
+fang	Olap_10.2	count_table_column	5FANG/count/all.count.txt		yes	notebook_only
+olivieri	S02_Olaparib_T15_A	count_table_column	7OLIVIERI/counts/Dataset_S2_readcounts.txt		yes	notebook_only
+olivieri	S02_Olaparib_T15_B	count_table_column	7OLIVIERI/counts/Dataset_S2_readcounts.txt		yes	notebook_only
+olivieri	S02_NT_T15_A	count_table_column	7OLIVIERI/counts/Dataset_S2_readcounts.txt		yes	notebook_only
+olivieri	S02_NT_T15_B	count_table_column	7OLIVIERI/counts/Dataset_S2_readcounts.txt		yes	notebook_only

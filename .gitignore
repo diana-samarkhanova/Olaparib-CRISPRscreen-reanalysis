@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.venv/
+datasets/**
+!datasets/README.md
+results/**
+!results/README.md
+logs/**
+!logs/README.md
+*.fastq
+*.fastq.gz
+*.fq.gz
+*.sra

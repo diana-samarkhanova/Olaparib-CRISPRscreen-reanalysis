@@ -1,0 +1,26 @@
+{
+  "status": "awaiting_original_export_and_settings",
+  "original_analysis_method": null,
+  "reactome_release": null,
+  "analysis_date": null,
+  "organism": null,
+  "identifier_type": null,
+  "input_gene_file": null,
+  "background_definition": null,
+  "background_file": null,
+  "statistical_test": null,
+  "multiple_testing_method": null,
+  "fdr_threshold": null,
+  "include_interactors": null,
+  "project_to_human": null,
+  "raw_results_file": null,
+  "unmapped_identifiers_file": null,
+  "manual_grouping": true,
+  "manuscript_reported_numbers_unverified": {
+    "input_genes": 163,
+    "reported_pathways": 733,
+    "significant_pathways": 109,
+    "enrichment_based_modules": 7,
+    "literature_informed_groups": 1
+  }
+}
