@@ -1,4 +1,4 @@
-"""Synthetic checks for risks relevant to manuscript recurrence reporting."""
+"""Tests for hit selection and recurrence counting."""
 import csv
 import importlib.util
 import json

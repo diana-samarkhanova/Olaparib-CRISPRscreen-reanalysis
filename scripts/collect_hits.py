@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Collect positive-selection evidence under explicitly verified recurrence rules.
-
-This helper was written during repository preparation. It does not reconstruct
-unrecorded historical settings or force a particular number of recurrent genes.
-"""
+"""Select positive MAGeCK hits and count support across defined screen units."""
 
 import argparse
 import csv

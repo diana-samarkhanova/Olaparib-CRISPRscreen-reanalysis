@@ -1,5 +1,5 @@
-# Original analysis logs
+# Run logs
 
-Add original count/test logs for the recorded runs and for the studies not represented in the current notebook.
-Use them to recover the MAGeCK version and effective settings. Keep historical runs distinguishable from any later reruns.
-The original logs have not yet been supplied. This directory is ignored by Git by default except for this README.
+Original MAGeCK logs will be added here to document software versions, parameters and sample processing. Keep logs from later reruns in separate directories.
+
+This directory is excluded from Git except for this README.

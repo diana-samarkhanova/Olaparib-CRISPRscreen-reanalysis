@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-# Transcribed from Codes for others data.docx; original execution logs pending.
-# Study: Fang et al. 2019. Stage: mageck test.
-# Paths are relative to the study working directory supplied as the first argument.
-# No normalization, statistical, or CNV options were added to the source commands.
+# Fang et al. 2019; mageck test.
+# Usage: pass the study working directory as the first argument.
 set -euo pipefail
 if [[ $# -ne 1 ]]; then
   printf 'Usage: bash %s /absolute/path/to/5FANG\n' "$0" >&2
@@ -11,7 +9,7 @@ fi
 cd -- "$1"
 command -v mageck >/dev/null || { printf 'Activate the verified MAGeCK environment first.\n' >&2; exit 127; }
 
-# fang_test_01; source paragraphs 393-397
+# fang_test_01
 if [[ -e results/Olap5_vs_DMSO.gene_summary.txt ]]; then
   printf 'Output already exists; use a new study working directory to retain provenance.\n' >&2
   exit 2
@@ -23,7 +21,7 @@ mageck test \
 -c DMSO.1,DMSO.2 \
 -n results/Olap5_vs_DMSO
 
-# fang_test_02; source paragraphs 400-404
+# fang_test_02
 if [[ -e results/Olap10_vs_DMSO.gene_summary.txt ]]; then
   printf 'Output already exists; use a new study working directory to retain provenance.\n' >&2
   exit 2
@@ -35,7 +33,7 @@ mageck test \
 -c DMSO.1,DMSO.2 \
 -n results/Olap10_vs_DMSO
 
-# fang_test_03; source paragraphs 408-412
+# fang_test_03
 if [[ -e results/Olap_all_vs_DMSO.gene_summary.txt ]]; then
   printf 'Output already exists; use a new study working directory to retain provenance.\n' >&2
   exit 2

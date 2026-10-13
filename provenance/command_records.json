@@ -25,7 +25,7 @@
         "counts/lau_counts"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "lau_test_01",
@@ -47,7 +47,7 @@
         "counts/lau_test_Control_vs_OL1"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "lin_count_01",
@@ -72,7 +72,7 @@
         "counts/lin_counts_t9ola_test"
       ],
       "selected_for_script": false,
-      "selection_note": "Earlier exploratory count command; final notebook block retained for execution"
+      "selection_note": "Final count block used instead"
     },
     {
       "command_id": "lin_count_02",
@@ -118,7 +118,7 @@
         "counts/lin_counts_OLA_DMSO3"
       ],
       "selected_for_script": false,
-      "selection_note": "Earlier exploratory count command; final notebook block retained for execution"
+      "selection_note": "Final count block used instead"
     },
     {
       "command_id": "lin_count_03",
@@ -164,7 +164,7 @@
         "counts/lin_counts_OLA_DMSO3"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "lin_test_01",
@@ -186,7 +186,7 @@
         "test/T9_OLA_vs_DMSO3"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "lin_test_02",
@@ -208,7 +208,7 @@
         "test/T12_OLA_vs_DMSO3"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "lin_test_03",
@@ -230,7 +230,7 @@
         "test/T15_OLA_vs_DMSO3"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "lin_test_04",
@@ -252,7 +252,7 @@
         "test/T18_OLA_vs_DMSO3"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "tuano_test_01",
@@ -274,7 +274,7 @@
         "HMLE_Olap_vs_DMSO"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "tuano_test_02",
@@ -296,7 +296,7 @@
         "mesHMLE_Olap_vs_DMSO"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "tuano_test_03",
@@ -318,7 +318,7 @@
         "B80_T17_Olap_vs_DMSO"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "tuano_test_04",
@@ -340,7 +340,7 @@
         "B80_T5_Olap_vs_DMSO"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "tuano_test_05",
@@ -362,7 +362,7 @@
         "K5_K19_Olap_vs_DMSO"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "juhasz_count_01",
@@ -387,7 +387,7 @@
         "counts/GeCKO_A_OL_VS_DMSO"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "juhasz_test_01",
@@ -409,7 +409,7 @@
         "counts/GeCKO_A_OL_vs_DMSO_test"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "juhasz_count_02",
@@ -434,7 +434,7 @@
         "counts/GeCKO_B_OL_VS_DMSO"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "juhasz_test_02",
@@ -456,7 +456,7 @@
         "counts/GeCKO_B_OL_vs_DMSO_test"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "fang_test_01",
@@ -478,7 +478,7 @@
         "results/Olap5_vs_DMSO"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "fang_test_02",
@@ -500,7 +500,7 @@
         "results/Olap10_vs_DMSO"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "fang_test_03",
@@ -522,7 +522,7 @@
         "results/Olap_all_vs_DMSO"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     },
     {
       "command_id": "olivieri_test_01",
@@ -544,7 +544,7 @@
         "counts/dataset2_OL_vs_NT_T15_test"
       ],
       "selected_for_script": true,
-      "selection_note": "Transcribed; execution and settings await original logs"
+      "selection_note": "From analysis notes; original logs pending"
     }
   ]
 }

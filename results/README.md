@@ -1,5 +1,5 @@
-# Derived results
+# Results
 
-No study results are included in this draft. The hit-selection helper writes per-comparison evidence,
-comparison summaries, recurrent-gene support and the exact invocation settings after all input decisions are verified.
-Use a new output directory for each run. This directory is ignored by Git by default except for this README.
+Each run of `collect_hits.py` writes per-comparison gene statistics, hit counts, recurrent genes, the comparison table used and a run summary. Use a separate output directory for each run.
+
+Study results have not yet been added. This directory is excluded from Git except for this README.

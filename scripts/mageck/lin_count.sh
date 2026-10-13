@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-# Transcribed from Codes for others data.docx; original execution logs pending.
-# Study: Lin et al. 2024. Stage: mageck count.
-# Paths are relative to the study working directory supplied as the first argument.
-# No normalization, statistical, or CNV options were added to the source commands.
+# Lin et al. 2024; mageck count.
+# Usage: pass the study working directory as the first argument.
 set -euo pipefail
 if [[ $# -ne 1 ]]; then
   printf 'Usage: bash %s /absolute/path/to/2LIN\n' "$0" >&2
@@ -11,7 +9,7 @@ fi
 cd -- "$1"
 command -v mageck >/dev/null || { printf 'Activate the verified MAGeCK environment first.\n' >&2; exit 127; }
 
-# lin_count_03; source paragraphs 193-222
+# lin_count_03
 if [[ -e counts/lin_counts_OLA_DMSO3.count.txt ]]; then
   printf 'Output already exists; use a new study working directory to retain provenance.\n' >&2
   exit 2

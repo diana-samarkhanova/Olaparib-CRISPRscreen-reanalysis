@@ -1,47 +1,31 @@
-# Reactome analysis and module assignment
+# Reactome analysis
 
-The enrichment analysis and manual grouping are separate steps. The current repository contains their metadata schemas,
-not new enrichment results or invented assignments.
+The original enrichment export and settings are needed to complete this part of the repository.
 
-## Recover the original enrichment analysis
+## Enrichment
 
-Populate `metadata/reactome_analysis.json` from the actual analysis record:
+Record the following in `metadata/reactome_analysis.json`:
 
-- Exact input genes and identifier type; retain mapped and unmapped identifiers.
-- Reactome release, analysis date, organism and service or software used.
-- Background/universe actually used, with a file or precise definition.
+- Input gene file, identifier type and mapped/unmapped identifiers.
+- Reactome release, analysis date, organism and analysis service or software.
+- Background definition and gene list, where applicable.
 - Statistical test, multiple-testing correction and FDR threshold.
-- Options affecting projection, interactors and identifier mapping.
-- Complete exported results before significance filtering.
+- Projection and interactor settings.
+- Full result table before significance filtering.
 
-If the analysis was performed on the Reactome website, record that fact and retain its exported results.
-An API script may be added for a documented rerun after the settings are recovered.
-A newly written script is not evidence that the historical analysis used that script.
-Running against a newer Reactome release may change mappings, pathway counts and significance.
+If the original analysis used the Reactome website, retain that export and describe the web analysis. Any later scripted rerun should record its own settings and database release. Changes in release or background may change pathway membership and significance. The background is especially relevant because the source studies include focused libraries.
 
-The background needs particular attention because the input studies include focused libraries.
-First recover the reported analysis; document and distinguish any revised or sensitivity analysis with a different universe.
-The manuscript's values (163 input genes, 733 pathways and 109 significant pathways) are presently unverified targets for comparison,
-not constants that a script should force.
+## Functional modules
 
-## Record manual grouping
+Pathways were grouped manually into seven modules. An eighth group was defined using the literature.
 
-In `metadata/pathway_to_module.tsv`, record the stable Reactome pathway ID, pathway name,
-module ID, assignment basis, source reference and curation note.
-In `metadata/gene_to_module.tsv`, record each gene-module relationship and the supporting pathway or literature reference.
-Use `assignment_basis` to distinguish `reactome_enrichment` from `literature_informed` assignments.
+| File | Required information |
+| --- | --- |
+| `metadata/pathway_to_module.tsv` | Reactome pathway ID, pathway name, module and basis for assignment |
+| `metadata/gene_to_module.tsv` | Gene, module, supporting pathway or reference, and any primary assignment |
 
-There are seven enrichment-based modules in the manuscript framework and a literature-informed eighth group.
-Do not describe this as unsupervised clustering unless such an algorithm was actually used.
-Do not assume every gene lacking a significant pathway belongs to a mechanistically coherent eighth module.
-Preserve the actual reasoning and source references for those assignments.
+Use `reactome_enrichment` or `literature_informed` in `assignment_basis` to distinguish the two sources of evidence. Record the rule for genes assigned to more than one module. If multiple memberships are retained, use one row per gene-module relationship and report unique gene counts separately. If a figure uses one primary assignment, document how it was chosen and retain the other assignments in the table.
 
-Before filling the tables, document whether multiple module memberships are allowed.
-For multi-membership, retain one row per relationship and distinguish relationship counts from unique gene counts.
-If the figures require one primary assignment, document the prioritization rule and retain secondary memberships in the evidence table.
-The `is_primary_assignment` column is a record of a decision, not a reason to choose one automatically.
+Once the assignments are complete, they can be applied by script to regenerate the tables and figures.
 
-After those tables are complete, a short script can apply the curated assignments to regenerate tables and figures.
-It should preserve the provenance of manual choices and check for unassigned genes, conflicting primary assignments and duplicate relationships.
-
-Reference: https://reactome.org/userguide/analysis
+Reference: [Reactome analysis guide](https://reactome.org/userguide/analysis).

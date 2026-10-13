@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-# Transcribed from Codes for others data.docx; original execution logs pending.
-# Study: Lin et al. 2024. Stage: mageck test.
-# Paths are relative to the study working directory supplied as the first argument.
-# No normalization, statistical, or CNV options were added to the source commands.
+# Lin et al. 2024; mageck test.
+# Usage: pass the study working directory as the first argument.
 set -euo pipefail
 if [[ $# -ne 1 ]]; then
   printf 'Usage: bash %s /absolute/path/to/2LIN\n' "$0" >&2
@@ -11,7 +9,7 @@ fi
 cd -- "$1"
 command -v mageck >/dev/null || { printf 'Activate the verified MAGeCK environment first.\n' >&2; exit 127; }
 
-# lin_test_01; source paragraphs 225-229
+# lin_test_01
 if [[ -e test/T9_OLA_vs_DMSO3.gene_summary.txt ]]; then
   printf 'Output already exists; use a new study working directory to retain provenance.\n' >&2
   exit 2
@@ -23,7 +21,7 @@ mageck test \
 -c T9_DMSO3_B,T9_DMSO3_A \
 -n test/T9_OLA_vs_DMSO3
 
-# lin_test_02; source paragraphs 231-235
+# lin_test_02
 if [[ -e test/T12_OLA_vs_DMSO3.gene_summary.txt ]]; then
   printf 'Output already exists; use a new study working directory to retain provenance.\n' >&2
   exit 2
@@ -35,7 +33,7 @@ mageck test \
 -c T12_DMSO3_C,T12_DMSO3_B,T12_DMSO3_A \
 -n test/T12_OLA_vs_DMSO3
 
-# lin_test_03; source paragraphs 237-241
+# lin_test_03
 if [[ -e test/T15_OLA_vs_DMSO3.gene_summary.txt ]]; then
   printf 'Output already exists; use a new study working directory to retain provenance.\n' >&2
   exit 2
@@ -47,7 +45,7 @@ mageck test \
 -c T15_DMSO3_C,T15_DMSO3_B,T15_DMSO3_A \
 -n test/T15_OLA_vs_DMSO3
 
-# lin_test_04; source paragraphs 243-247
+# lin_test_04
 if [[ -e test/T18_OLA_vs_DMSO3.gene_summary.txt ]]; then
   printf 'Output already exists; use a new study working directory to retain provenance.\n' >&2
   exit 2
