@@ -1,0 +1,5 @@
+Samples	baseline	treatment_vs_control
+mesHMLE_DMSO_1	1	0
+mesHMLE_DMSO_2	1	0
+mesHMLE_OL_1	1	1
+mesHMLE_OL_2	1	1

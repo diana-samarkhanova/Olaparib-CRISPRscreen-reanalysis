@@ -1,12 +1,12 @@
 # Analysis notes
 
-The following points need checking against the original files and run logs before the metadata are finalized.
+The following RRA records need checking against the original files and run logs before the metadata are finalized. MLE sample selections, normalization and design matrices are documented separately in [MLE analysis](mle_analysis.md).
 
 ## Inputs and settings
 
 Record the source and original filename of each count table, including tables received from authors. Keep any formatting or gene-identifier changes with the original file. For studies using more than one CRISPR approach, identify the knockout subset used here.
 
-The commands do not explicitly set normalization or CNV correction. Recover the MAGeCK version and effective defaults from the logs, along with replicate handling, filtering and statistical settings. The final hit-selection threshold is separate from MAGeCK's internal parameters.
+The recorded RRA commands do not explicitly set normalization or CNV correction. Recover the MAGeCK version and effective defaults from the logs, along with replicate handling, filtering and statistical settings. The final hit-selection threshold is separate from MAGeCK's internal parameters.
 
 Confirm that positive-selection results were used throughout, whether an additional LFC filter was applied, and whether any hit lists were taken directly from the original publications. Data from a sensitivity-focused study can still be reanalyzed for positive selection.
 
@@ -37,3 +37,4 @@ The source record also needs the search date, inclusion/exclusion decisions, dat
 - [MAGeCK usage](https://sourceforge.net/p/mageck/wiki/usage/)
 - [MAGeCK questions and answers](https://sourceforge.net/p/mageck/wiki/QA/)
 - [Reactome analysis guide](https://reactome.org/userguide/analysis)
+

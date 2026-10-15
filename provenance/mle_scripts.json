@@ -1,0 +1,55 @@
+{
+  "snapshot_date": "2026-10-15",
+  "description": "Python scripts copied byte-for-byte from the versions supplied for MLE reanalysis. Static design matrices were generated from their make_design functions.",
+  "target_environment": {
+    "mageck": "0.5.9.5",
+    "python": "3.10",
+    "numpy": "1.23.5",
+    "specification": "environment-mle.yml",
+    "complete_environment_export": false
+  },
+  "scripts": [
+    {
+      "study_id": "lau",
+      "path": "scripts/mle/run_lau_mle.py",
+      "role": "current_configuration",
+      "sha256": "bd7fd1d031954fab574890b84ce025db89262192509106e37593d13e0c350b03",
+      "script_version": null
+    },
+    {
+      "study_id": "lin",
+      "path": "scripts/mle/run_lin_mle_joint.py",
+      "role": "current_configuration",
+      "sha256": "d40f9fb07b7cf8418345424787ef7afff1e414bd408706c4c92ad442b9070e43",
+      "script_version": "2026-10-15-lin-joint-common-effect"
+    },
+    {
+      "study_id": "tuano",
+      "path": "scripts/mle/run_tuano_mle.py",
+      "role": "current_configuration",
+      "sha256": "c2aeb9c177b6a7fb1a0dc89ec1e212676ff64448d344c2ab7592677c7630ad22",
+      "script_version": "2026-10-15-mle-identifier-fix"
+    },
+    {
+      "study_id": "clements",
+      "path": "scripts/mle/run_clements_mle.py",
+      "role": "current_configuration",
+      "sha256": "6b8719c66dad9300071f2f271a31d1b4cd93c88da85da4a272fc47fa50da9c99",
+      "script_version": "2026-10-15-clements-v1"
+    },
+    {
+      "study_id": "lin",
+      "path": "scripts/mle/previous/run_lin_mle.py",
+      "role": "previous_per_timepoint_configuration",
+      "sha256": "8612e6111a5ded671e07f00bd10045c66dc7e8cac47a73e87887b715a95b6ad4",
+      "script_version": null
+    }
+  ],
+  "current_comparisons": 9,
+  "run_evidence": "Full run logs and completed MLE result tables have not been archived in this repository. This snapshot does not establish which outputs entered the manuscript.",
+  "validation": [
+    "Five Python files parse and match the supplied source bytes.",
+    "Nine current design matrices have unique sample rows, full column rank and the declared treatment contrast.",
+    "Clements input preparation and the original MAGeCK 0.5.9.5 count loader were previously checked on both 77441-guide exports; no MLE fit was performed for this upload."
+  ]
+}
