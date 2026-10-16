@@ -1,0 +1,10 @@
+name: mageck_env
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=3.10
+  - numpy=1.23.5
+  - mageck=0.5.9.5
+

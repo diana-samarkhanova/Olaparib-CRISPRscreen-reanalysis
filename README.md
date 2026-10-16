@@ -2,7 +2,7 @@
 
 Code and dataset records for *Beyond Homologous Recombination: Functional Modules of Olaparib Resistance Revealed by CRISPR Screens*.
 
-The repository currently includes MAGeCK commands for six of the ten publications in the review. Original run logs, count tables and analysis outputs are being added. The reported set of 163 recurrent genes has not yet been reproduced from these scripts.
+The RRA commands cover six of the ten publications in the review. MLE scripts are available for Lau, Lin, Tuano and Clements. Original run logs, count tables and analysis outputs are being added. The reported set of 163 recurrent genes has not yet been reproduced from this repository.
 
 ## Data sources
 
@@ -14,16 +14,19 @@ Count tables contain sgRNA read counts, not preselected gene lists. Sources, fil
 
 | Path | Contents |
 | --- | --- |
-| `scripts/mageck/` | Count and test commands, grouped by study |
+| `scripts/mageck/` | RRA count and test commands, grouped by study |
+| `scripts/mle/` | MLE scripts for Lau, Lin, Tuano and Clements |
+| `metadata/mle_comparisons.tsv` | MLE samples, settings and design-matrix paths |
+| `metadata/mle_designs/` | Design matrices generated from the current MLE scripts |
 | `scripts/collect_hits.py` | Positive-hit selection and recurrence counting |
 | `metadata/` | Studies, sample labels, comparisons and Reactome settings |
 | `provenance/command_records.json` | Original commands and their locations in the analysis notes |
 | `docs/` | Dataset questions and Reactome methods |
 | `tests/` | Tests for hit selection and recurrence counting |
 
-The MAGeCK scripts preserve the original arguments and output prefixes. Each takes the study working directory as its only argument. Lin's final count command is used; the two earlier versions remain in the command record.
+The shell scripts in `scripts/mageck/` preserve the original arguments and output prefixes. Each takes the study working directory as its only argument. Lin's final count command is used; the two earlier versions remain in the command record.
 
-## Running MAGeCK
+## Running RRA
 
 Activate the MAGeCK environment and place the input files in the relative paths shown in each script. The original software version and effective defaults still need to be checked against the logs.
 
@@ -38,7 +41,13 @@ bash scripts/mageck/tuano_test.sh /path/to/3TUANO
 
 Use a fresh output directory for each run. See [analysis notes](docs/analysis_notes.md) for the comparisons that need clarification.
 
-## Selecting recurrent genes
+## Running MLE
+
+See [MLE analysis](docs/mle_analysis.md) for the environment, inputs, commands and model definitions. Lin uses one shared OLA effect adjusted for sampling day. Tuano cell models and Clements genotypes are fitted separately. The earlier Lin per-timepoint script is retained in `scripts/mle/previous/`.
+
+MLE positive-hit files use `treatment_vs_control|beta > 0` and permutation `treatment_vs_control|fdr < 0.05`. The recurrence script below currently accepts RRA outputs; it does not combine MLE results.
+
+## Selecting recurrent genes from RRA
 
 `collect_hits.py` is a new postprocessing script. Its selection rules will be checked against the original gene lists.
 
@@ -70,3 +79,4 @@ python3 -m unittest discover -s tests -v
 ```
 
 Tests use synthetic data to check positive-hit selection, recurrence counting and input validation. Study datasets have not yet been rerun here.
+
