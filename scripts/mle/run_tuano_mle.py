@@ -1,37 +1,21 @@
 #!/usr/bin/env python3
-"""Run five separate MAGeCK MLE comparisons for the Tuano OL/DMSO screens.
+"""Fit separate MAGeCK MLE models for the Tuano OL/DMSO screens.
 
-Place this script beside tuano_count_edited.txt, activate mageck_env,
-and run: python run_tuano_mle.py
-Optional: python run_tuano_mle.py --dry-run
-Optional: python run_tuano_mle.py --comparisons HMLE B80_T17
-Optional: python run_tuano_mle.py --count-table /path/to/count_table.txt
+Run beside tuano_count_edited.txt:
+    python run_tuano_mle.py
+    python run_tuano_mle.py --dry-run
+    python run_tuano_mle.py --comparisons HMLE B80_T17
+    python run_tuano_mle.py --count-table /path/to/count_table.txt
 
-No separate T0 samples are present in the supplied header. For each comparison:
-    Samples   baseline  treatment_vs_control
-    DMSO_1    1         0
-    DMSO_2    1         0
-    OL_1      1         1
-    OL_2      1         1
+Each of the five cell models has two DMSO and two OL samples. DMSO is the
+reference; there is no separate T0 or replicate-block term. B80-T5 and B80-T17
+are distinct cell lines. Cross-screen recurrence units are defined separately.
+Positive beta indicates enrichment under OL. FDR is calculated within each fit.
 
-DMSO is the statistical reference, not an assumed day-zero measurement.
-Each cell model and B80 time point is fitted separately. Sample columns remain
-separate, without averaging or a replicate-block term. Labels 1/2 alone are not
-taken as evidence of a matched-pair design. Positive beta means relative
-enrichment under OL versus DMSO within that comparison. There is no separately
-estimated DMSO-versus-T0 effect because this table has no T0 samples.
-FDR is within each comparison, not jointly over all five tests. B80 T5/T17 are
-time points of the same cell model, not two independent screens for overlap.
-Special characters in sample names are preserved; output folder names are safe.
-
-Only Python's standard library and an existing MAGeCK installation are needed.
-This script validates and selects raw counts; it does not pre-normalize counts.
-MAGeCK 0.5.9.5 splits TSV input on all whitespace. IDs containing whitespace
-or double quotes therefore receive collision-free temporary aliases. All
-counts, guides and gene groupings are preserved; identifier_map.csv records
-the mapping. Ranked CSV files use the original gene names. When genes were
-aliased, an additional .gene_summary.original_ids.txt is written; the original
-MAGeCK .gene_summary.txt retains the exact engine output with temporary IDs.
+Raw counts and sample labels are preserved. Whitespace and quote characters in
+guide/gene IDs receive reversible aliases for MAGeCK 0.5.9.5. Identifier maps
+record these changes; derived CSVs restore the original gene IDs. Engine
+outputs retain the aliases, with an additional original-ID summary when needed.
 """
 
 import argparse
@@ -62,12 +46,12 @@ COMPARISONS = {
         "treatment": ["mesHMLE_OL_1", "mesHMLE_OL_2"],
     },
     "B80_T5": {
-        "cell_model": "B80", "timepoint": "T5",
+        "cell_model": "B80-T5", "timepoint": None,
         "control": ["B80_T5_DMSO_1", "B80_T5_DMSO_2"],
         "treatment": ["B80_T5_OL_1", "B80_T5_OL_2"],
     },
     "B80_T17": {
-        "cell_model": "B80", "timepoint": "T17",
+        "cell_model": "B80-T17", "timepoint": None,
         "control": ["B80_T17_DMSO_1", "B80_T17_DMSO_2"],
         "treatment": ["B80_T17_OL_1", "B80_T17_OL_2"],
     },
@@ -77,9 +61,9 @@ COMPARISONS = {
         "treatment": ["K5+/K19-_OL_1", "K5+/K19-_OL_2"],
     },
 }
-NORM_METHOD = "median"  # Template/default; assess control-guide normalization if needed.
+NORM_METHOD = "median"  # MAGeCK normalization method.
 THREADS = 2
-PERMUTATION_ROUNDS = 2  # MAGeCK default, as in the previous template-based run.
+PERMUTATION_ROUNDS = 2  # MAGeCK default.
 FDR_THRESHOLD = 0.05
 EFFECT = "treatment_vs_control"
 SCRIPT_VERSION = "2026-10-15-mle-identifier-fix"
@@ -253,7 +237,7 @@ def summarize(prefix, comparison, reverse_genes=None):
     for row in results:
         beta = result_number(row[f"{EFFECT}|beta"])
         fdr = result_number(row[f"{EFFECT}|fdr"])
-        # Direct fitted contrast, not a subtraction of separately fitted betas.
+        # Directly fitted treatment-versus-control coefficient.
         row["delta_beta"] = beta
         row["positive_selection"] = math.isfinite(beta) and beta > 0
         row["significant_positive"] = (row["positive_selection"]
@@ -328,7 +312,7 @@ def main():
                                "raw MAGeCK outputs retain engine IDs.",
         "design_note": "Separate two-group models: DMSO is reference; no T0 samples. "
                        "No replicate-block effect. No sample averaging. "
-                       "B80 T5 and T17 are not independent screens for cross-screen overlap. "
+                       "B80-T5 and B80-T17 are distinct cell lines; recurrence units are defined separately. "
                        "FDR is within each comparison; no across-comparison adjustment.",
         "commands": {},
     }

@@ -1,26 +1,21 @@
 #!/usr/bin/env python3
-"""Run four separate MAGeCK MLE comparisons for the Lin OLA/DMSO3 screen.
+"""Archived per-timepoint MAGeCK MLE configuration for Lin OLA/DMSO3.
 
-Place this script beside lin_counts_OLA_DMSO3.count.txt, activate mageck_env,
-and run: python run_lin_mle.py
-Optional: python run_lin_mle.py --dry-run
-Optional: python run_lin_mle.py --timepoints T18
+Run beside lin_counts_OLA_DMSO3.count.txt:
+    python run_lin_mle.py
+    python run_lin_mle.py --dry-run
+    python run_lin_mle.py --timepoints T18
 
-At each time point the model follows Code_mle.docx:
+Each fit includes three T0 samples and the same-day DMSO and OLA samples:
     Samples       baseline  control  treatment_vs_control
     T0            1         0        0
     same-day DMSO 1         1        0
     same-day OLA  1         1        1
 
-All three T0 samples form a shared baseline in each separate analysis.
-Sample columns are kept separate, without averaging or a replicate-block term.
-The A/B/C labels alone are not taken as evidence of a matched-pair design.
-Different time points are not treated as independent biological replicates.
-Positive beta means relative enrichment under OLA versus same-day DMSO.
-FDR is calculated within each comparison, not jointly over all four tests.
-
-Only Python's standard library and an existing MAGeCK installation are needed.
-This script validates and selects raw counts; it does not pre-normalize counts.
+Counts remain separate. The model has no replicate-block term. Positive beta
+indicates enrichment under OLA relative to same-day DMSO; FDR is adjusted
+within each fit. Timepoints from one screen are not independent recurrence
+units. The current joint configuration is ../run_lin_mle_joint.py.
 """
 
 import argparse
@@ -57,9 +52,9 @@ COMPARISONS = {
         "treatment": ["T18_OLA_C", "T18_OLA_B", "T18_OLA_A"],
     },
 }
-NORM_METHOD = "median"  # Template/default; assess control-guide normalization if needed.
+NORM_METHOD = "median"  # MAGeCK normalization method.
 THREADS = 2
-PERMUTATION_ROUNDS = 2  # MAGeCK default, as in the previous template-based run.
+PERMUTATION_ROUNDS = 2  # MAGeCK default.
 FDR_THRESHOLD = 0.05
 EFFECT = "treatment_vs_control"
 
@@ -154,7 +149,7 @@ def summarize(prefix, timepoint):
     for row in results:
         beta = result_number(row[f"{EFFECT}|beta"])
         fdr = result_number(row[f"{EFFECT}|fdr"])
-        # Direct fitted contrast, not a subtraction of separately fitted betas.
+        # Directly fitted treatment-versus-control coefficient.
         row["delta_beta"] = beta
         row["positive_selection"] = math.isfinite(beta) and beta > 0
         row["significant_positive"] = (row["positive_selection"]

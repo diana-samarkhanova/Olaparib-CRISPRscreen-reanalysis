@@ -1,31 +1,22 @@
 # Reactome analysis
 
-The original enrichment export and settings are needed to complete this part of the repository.
+The repository separates pathway enrichment from the subsequent manual assignment of functional modules. The original enrichment export and settings are not archived; current availability is listed in [data status](data_status.md).
 
-## Enrichment
+## Enrichment record
 
-Record the following in `metadata/reactome_analysis.json`:
+`metadata/reactome_analysis.json` stores the input gene list, identifier type, organism, analysis date, Reactome release, software or service, background, statistical test, multiple-testing correction and FDR threshold. It also records projection/interactor settings and paths to the full result table and unmapped identifiers.
 
-- Input gene file, identifier type and mapped/unmapped identifiers.
-- Reactome release, analysis date, organism and analysis service or software.
-- Background definition and gene list, where applicable.
-- Statistical test, multiple-testing correction and FDR threshold.
-- Projection and interactor settings.
-- Full result table before significance filtering.
-
-If the original analysis used the Reactome website, retain that export and describe the web analysis. Any later scripted rerun should record its own settings and database release. Changes in release or background may change pathway membership and significance. The background is especially relevant because the source studies include focused libraries.
+Each analysis is associated with its own settings and export. A rerun with another release or background is a separate analysis because pathway membership and significance can change. Library coverage is relevant to the background choice, particularly for focused screens.
 
 ## Functional modules
 
 Pathways were grouped manually into seven modules. An eighth group was defined using the literature.
 
-| File | Required information |
+| File | Contents |
 | --- | --- |
-| `metadata/pathway_to_module.tsv` | Reactome pathway ID, pathway name, module and basis for assignment |
-| `metadata/gene_to_module.tsv` | Gene, module, supporting pathway or reference, and any primary assignment |
+| `metadata/pathway_to_module.tsv` | Pathway ID, pathway name, module and assignment basis |
+| `metadata/gene_to_module.tsv` | Gene, module, supporting pathway or reference, and primary assignment |
 
-Use `reactome_enrichment` or `literature_informed` in `assignment_basis` to distinguish the two sources of evidence. Record the rule for genes assigned to more than one module. If multiple memberships are retained, use one row per gene-module relationship and report unique gene counts separately. If a figure uses one primary assignment, document how it was chosen and retain the other assignments in the table.
-
-Once the assignments are complete, they can be applied by script to regenerate the tables and figures.
+The `assignment_basis` values distinguish `reactome_enrichment` from `literature_informed` assignments. Each gene-module relationship occupies one row. Unique gene counts are reported separately from membership counts when a gene belongs to multiple modules. A primary assignment for a figure is recorded alongside the other memberships and its selection rationale.
 
 Reference: [Reactome analysis guide](https://reactome.org/userguide/analysis).
