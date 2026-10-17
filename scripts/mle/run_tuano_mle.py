@@ -15,13 +15,13 @@ No separate T0 samples are present in the supplied header. For each comparison:
     OL_2      1         1
 
 DMSO is the statistical reference, not an assumed day-zero measurement.
-Each cell model and B80 time point is fitted separately. Sample columns remain
+Each cell model is fitted separately. Sample columns remain
 separate, without averaging or a replicate-block term. Labels 1/2 alone are not
 taken as evidence of a matched-pair design. Positive beta means relative
 enrichment under OL versus DMSO within that comparison. There is no separately
 estimated DMSO-versus-T0 effect because this table has no T0 samples.
-FDR is within each comparison, not jointly over all five tests. B80 T5/T17 are
-time points of the same cell model, not two independent screens for overlap.
+FDR is within each comparison, not jointly over all five tests. B80-T5 and
+B80-T17 are distinct cell lines; define the recurrence unit before integration.
 Special characters in sample names are preserved; output folder names are safe.
 
 Only Python's standard library and an existing MAGeCK installation are needed.
@@ -62,12 +62,12 @@ COMPARISONS = {
         "treatment": ["mesHMLE_OL_1", "mesHMLE_OL_2"],
     },
     "B80_T5": {
-        "cell_model": "B80", "timepoint": "T5",
+        "cell_model": "B80-T5", "timepoint": None,
         "control": ["B80_T5_DMSO_1", "B80_T5_DMSO_2"],
         "treatment": ["B80_T5_OL_1", "B80_T5_OL_2"],
     },
     "B80_T17": {
-        "cell_model": "B80", "timepoint": "T17",
+        "cell_model": "B80-T17", "timepoint": None,
         "control": ["B80_T17_DMSO_1", "B80_T17_DMSO_2"],
         "treatment": ["B80_T17_OL_1", "B80_T17_OL_2"],
     },
@@ -77,12 +77,46 @@ COMPARISONS = {
         "treatment": ["K5+/K19-_OL_1", "K5+/K19-_OL_2"],
     },
 }
-NORM_METHOD = "median"  # Template/default; assess control-guide normalization if needed.
+NORM_METHOD = "median"
 THREADS = 2
 PERMUTATION_ROUNDS = 2  # MAGeCK default, as in the previous template-based run.
 FDR_THRESHOLD = 0.05
 EFFECT = "treatment_vs_control"
-SCRIPT_VERSION = "2026-10-15-mle-identifier-fix"
+SCRIPT_VERSION = "2026-10-17-median-checked"
+
+
+def require_median_counts(qc):
+    """Reject the automatic total fallback used by MAGeCK 0.5.9.5."""
+    if NORM_METHOD != "median":
+        raise ValueError("This workflow requires NORM_METHOD = 'median'.")
+    blocked = [f"{item['sample']} ({item['zero_percent']:.2f}% zeros)"
+               for item in qc if item.get("selected", True)
+               and 100 * item["zero_count_guides"] > 45 * item["guides"]]
+    if blocked:
+        raise ValueError(
+            "Median normalization cannot be accepted: MAGeCK 0.5.9.5 switches "
+            "to total when any selected sample has >45% zero-count guides. "
+            + "; ".join(blocked) + ". No MLE fit was run. Review the count table "
+            "and normalization choice; do not remove zero rows just to force median."
+        )
+
+
+def verify_median_log(prefix):
+    """Check the engine log before exporting hits; retain evidence per fit."""
+    log_path = Path(str(prefix) + ".log")
+    text = log_path.read_text(encoding="utf-8", errors="replace")
+    fallback = "Switch to total read count normalization." in text
+    factors = [line for line in text.splitlines() if "Final size factor:" in line]
+    verified = bool(factors) and not fallback
+    report = {"requested": NORM_METHOD, "log": str(log_path),
+              "median_verified_from_log": verified, "total_fallback": fallback,
+              "final_size_factor_log_lines": factors}
+    Path(str(prefix) + ".normalization.json").write_text(
+        json.dumps(report, indent=2) + "\n", encoding="utf-8"
+    )
+    if not verified:
+        raise RuntimeError(f"Median normalization was not verified in {log_path}. "
+                           "This run must not be used as a median-normalized result.")
 
 
 def make_design(comparison):
@@ -328,7 +362,7 @@ def main():
                                "raw MAGeCK outputs retain engine IDs.",
         "design_note": "Separate two-group models: DMSO is reference; no T0 samples. "
                        "No replicate-block effect. No sample averaging. "
-                       "B80 T5 and T17 are not independent screens for cross-screen overlap. "
+                       "B80-T5 and B80-T17 are distinct cell lines; recurrence unit requires a separate decision. "
                        "FDR is within each comparison; no across-comparison adjustment.",
         "commands": {},
     }
@@ -366,6 +400,7 @@ def main():
         if item["selected"]:
             print(f"{item['sample']}: {item['total_counts']} counts; "
                   f"{item['zero_percent']:.2f}% zero-count guides", flush=True)
+    require_median_counts(qc)
     if args.dry_run:
         print("Dry run complete. All inputs prepared; MAGeCK was not run.", flush=True)
         return
@@ -374,6 +409,7 @@ def main():
     for comparison, prefix, command in jobs:
         print("\nRunning", comparison, ":", shlex.join(command), flush=True)
         subprocess.run(command, check=True)
+        verify_median_log(prefix)
         summaries.append(summarize(prefix, comparison, reverse_genes))
     write_records(out / "comparison_summary.csv", list(summaries[0]), summaries)
     print("\nAll requested comparisons completed. Results:", out, flush=True)

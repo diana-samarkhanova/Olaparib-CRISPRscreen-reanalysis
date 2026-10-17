@@ -6,6 +6,8 @@ if [[ $# -ne 1 ]]; then
   printf 'Usage: bash %s /absolute/path/to/1LAU\n' "$0" >&2
   exit 2
 fi
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/median_normalization.sh"
 cd -- "$1"
 command -v mageck >/dev/null || { printf 'Activate the verified MAGeCK environment first.\n' >&2; exit 127; }
 
@@ -16,7 +18,9 @@ if [[ -e counts/lau_test_Control_vs_OL1.gene_summary.txt ]]; then
 fi
 mkdir -p -- counts
 mageck test \
+--norm-method median \
 -k counts/lau_counts.count.txt \
 -t OL_1 \
 -c Control \
 -n counts/lau_test_Control_vs_OL1
+require_median_log "counts/lau_test_Control_vs_OL1.log"

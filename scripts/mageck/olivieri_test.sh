@@ -6,6 +6,8 @@ if [[ $# -ne 1 ]]; then
   printf 'Usage: bash %s /absolute/path/to/7OLIVIERI\n' "$0" >&2
   exit 2
 fi
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/median_normalization.sh"
 cd -- "$1"
 command -v mageck >/dev/null || { printf 'Activate the verified MAGeCK environment first.\n' >&2; exit 127; }
 
@@ -16,7 +18,9 @@ if [[ -e counts/dataset2_OL_vs_NT_T15_test.gene_summary.txt ]]; then
 fi
 mkdir -p -- counts
 mageck test \
+--norm-method median \
 -k counts/Dataset_S2_readcounts.txt \
 -t S02_Olaparib_T15_A,S02_Olaparib_T15_B \
 -c S02_NT_T15_A,S02_NT_T15_B \
 -n counts/dataset2_OL_vs_NT_T15_test
+require_median_log "counts/dataset2_OL_vs_NT_T15_test.log"

@@ -6,7 +6,7 @@ The following RRA records need checking against the original files and run logs 
 
 Record the source and original filename of each count table, including tables received from authors. Keep any formatting or gene-identifier changes with the original file. For studies using more than one CRISPR approach, identify the knockout subset used here.
 
-The recorded RRA commands do not explicitly set normalization or CNV correction. Recover the MAGeCK version and effective defaults from the logs, along with replicate handling, filtering and statistical settings. The final hit-selection threshold is separate from MAGeCK's internal parameters.
+The historical RRA command records do not explicitly set normalization or CNV correction. The current shell scripts explicitly request median normalization and reject logs showing fallback to total; this is a code update, not evidence about the original runs. Recover the MAGeCK version and effective normalization from the original logs, along with replicate handling, filtering and statistical settings. `normalization_verified` in the RRA manifest remains unfilled until run evidence is available. The final hit-selection threshold is separate from MAGeCK's internal parameters. See [normalization policy](normalization.md).
 
 Confirm that positive-selection results were used throughout, whether an additional LFC filter was applied, and whether any hit lists were taken directly from the original publications. Data from a sensitivity-focused study can still be reanalyzed for positive selection.
 
@@ -16,13 +16,13 @@ Confirm that positive-selection results were used throughout, whether an additio
 | --- | --- | --- |
 | Lau | Both OL replicates counted; only OL_1 tested against one control | Reason for excluding OL_2 and its effect on the result |
 | Lin | Two treatment/control samples at T9; three at T12, T15 and T18. T0 counted but absent from the shown tests. | Replicate structure, DMSO3 control choice and grouping of timepoints |
-| Tuano | Five comparisons: HMLE, mesHMLE, B80_T17, B80_T5 and K5+/K19- | Model identities, meaning of T5/T17, KO subset and edits to `tuano_count_edited.txt` |
+| Tuano | Five comparisons: HMLE, mesHMLE, B80_T17, B80_T5 and K5+/K19-; B80-T5 and B80-T17 are distinct cell lines | Replicate structure, recurrence unit, KO subset and edits to `tuano_count_edited.txt` |
 | Juhasz | GeCKO A and B analyzed separately; notes describe HeLa | Model/library discrepancy with manuscript Table 1 and handling of A/B results |
 | Fang | Separate 5 and 10 dose comparisons plus a combined-dose test | Which results entered integration; distinction between dose groups and replicates |
 | Olivieri | Olaparib_T15 versus NT_T15 | Timepoint, control identity and source-table metadata |
 | Zimmermann, Clements, Tsujino, Zelceski | Commands not yet included | Actual input tables and `mageck test` commands from the logs |
 
-Lau's recorded zero-guide proportions are 81.90% for OL_1 and 83.07% for OL_2; Gini indices are 0.878 and 0.888. These values alone do not explain exclusion of OL_2.
+Lau's recorded zero-guide proportions are 81.90% for OL_1 and 83.07% for OL_2; Gini indices are 0.878 and 0.888. These values alone do not explain exclusion of OL_2. If the selected table still has that sparsity, MAGeCK 0.5.9.5 cannot complete an accepted median run under the current policy: it would automatically use total. Review the actual input and normalization choice before rerunning; do not drop zero-count guides merely to bypass this check.
 
 ## Combining results
 

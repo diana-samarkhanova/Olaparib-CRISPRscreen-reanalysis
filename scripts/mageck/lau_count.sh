@@ -16,6 +16,7 @@ if [[ -e counts/lau_counts.count.txt ]]; then
 fi
 mkdir -p -- counts
 mageck count \
+--norm-method median \
 -l library/Human_GeCKOv2_Library_combine.csv \
 --sample-label Control,OL_1,OL_2 \
 --fastq \

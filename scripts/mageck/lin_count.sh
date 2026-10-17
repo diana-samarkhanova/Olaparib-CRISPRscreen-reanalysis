@@ -16,6 +16,7 @@ if [[ -e counts/lin_counts_OLA_DMSO3.count.txt ]]; then
 fi
 mkdir -p -- counts
 mageck count \
+--norm-method median \
 -l library/library_sequences_mageck.tsv \
 --sample-label T0_Screen3_C,T0_Screen3_B,T0_Screen3_A,T9_OLA_B,T9_OLA_A,T9_DMSO3_B,T9_DMSO3_A,T12_OLA_C,T12_OLA_B,T12_OLA_A,T12_DMSO3_C,T12_DMSO3_B,T12_DMSO3_A,T15_OLA_C,T15_OLA_B,T15_OLA_A,T15_DMSO3_C,T15_DMSO3_B,T15_DMSO3_A,T18_OLA_C,T18_OLA_B,T18_OLA_A,T18_DMSO3_C,T18_DMSO3_B,T18_DMSO3_A \
 --fastq \
