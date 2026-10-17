@@ -1,5 +1,5 @@
 # Run logs
 
-Original MAGeCK logs will be added here to document software versions, parameters and sample processing. Keep logs from later reruns in separate directories.
+MAGeCK logs record software versions, parameters and sample processing. Each run has a separate directory. No study logs are currently archived here.
 
 This directory is excluded from Git except for this README.

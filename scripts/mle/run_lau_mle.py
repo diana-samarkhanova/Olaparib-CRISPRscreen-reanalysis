@@ -1,18 +1,14 @@
 #!/usr/bin/env python3
-"""Run MAGeCK MLE and rank positive treatment-versus-control effects.
+"""Fit MAGeCK MLE for Lau OL_1 versus Control.
 
-Configured for the same samples as the recorded Lau RRA: OL_1 versus Control.
-OL_2 is not selected here; its omission reproduces the RRA sample choice and
-does not establish that excluding it is justified for the final analysis.
-Control is the comparator label; this script does not assume that it is DMSO.
-
-Place this script beside lau_counts.count.txt and run:
+Run beside lau_counts.count.txt:
     python run_lau_mle.py
-Use --dry-run to validate counts and write the inputs without running MAGeCK.
+    python run_lau_mle.py --dry-run
 
-The optional three-group model follows Code_mle.docx. If genuine, separate
-baseline samples exist, list them in BASELINE_SAMPLES. Do not list the same
-sample in two groups. Independent samples must remain separate columns.
+The configured comparison has one sample per group and no separate T0.
+OL_2 exclusion and the identity of Control are unresolved in the source records.
+Optional BASELINE_SAMPLES adds a separate baseline group; group membership must
+be unique. Outputs include the design, selected raw counts, QC and ranked hits.
 """
 
 import argparse
@@ -31,12 +27,12 @@ import sys
 # Configuration
 FOLDER = Path(__file__).resolve().parent
 COUNT_FILES = ["lau_counts.count.txt"]
-BASELINE_SAMPLES = []  # No separate baseline column in the supplied Lau header.
+BASELINE_SAMPLES = []  # No separate T0 column.
 CONTROL_SAMPLES = ["Control"]
 TREATMENT_SAMPLES = ["OL_1"]
-NORM_METHOD = "total"  # The earlier Lau RRA fell back from median to total.
+NORM_METHOD = "total"  # Matches the recorded Lau RRA normalization fallback.
 THREADS = 2
-PERMUTATION_ROUNDS = 2  # Explicit MAGeCK default; unchanged from the template.
+PERMUTATION_ROUNDS = 2  # MAGeCK default.
 FDR_THRESHOLD = 0.05
 EFFECT = "treatment_vs_control"
 
@@ -121,7 +117,7 @@ def summarize(prefix):
         raise ValueError(f"Unexpected MLE result columns. Required: {required}")
     for row in results:
         beta, fdr = float(row[f"{EFFECT}|beta"]), float(row[f"{EFFECT}|fdr"])
-        # This is a directly fitted contrast, not a subtraction after fitting.
+        # Directly fitted treatment-versus-control coefficient.
         row["delta_beta"] = beta
         row["positive_selection"] = math.isfinite(beta) and beta > 0
         row["significant_positive"] = (row["positive_selection"]

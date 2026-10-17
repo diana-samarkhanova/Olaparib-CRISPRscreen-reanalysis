@@ -1,6 +1,6 @@
 # MAGeCK MLE analysis
 
-MLE scripts are provided for four studies. They use sgRNA count tables and call `mageck mle`; the RRA scripts use `mageck test`. Full MLE run logs and result tables have not yet been archived here. This addition documents the code and settings, rather than a completed reanalysis of every study in the review.
+The Lau, Lin, Tuano and Clements workflows use raw sgRNA count tables with `mageck mle`. This page describes their inputs, models and outputs. Run-log and result availability is listed in [data status](data_status.md).
 
 ## Environment and launch
 
@@ -11,7 +11,7 @@ conda env create -f environment-mle.yml
 conda activate mageck_env
 ```
 
-Use the existing environment if these versions are already installed. The YAML file is an installation specification, not a complete export of the original environment.
+An existing environment with these versions can also be used. The YAML file specifies the installation dependencies; a complete export of the original environment is not archived.
 
 Copy the required script from `scripts/mle/` into the directory containing its count table. From that directory, run:
 
@@ -33,17 +33,17 @@ Adding `--dry-run` prepares and validates the inputs without fitting MLE. Each r
 | Tuano | Separate OL-versus-DMSO fits for HMLE, mesHMLE, B80_T5, B80_T17 and K5+/K19-; two samples per condition | median |
 | Clements | Separate OL-versus-DMSO fits for HeLa WT and HeLa BRCA2KO; two samples per condition | median |
 
-All scripts default to two threads and two permutation rounds. Clements allows these to be changed with `--threads` and `--permutation-rounds`. Other MAGeCK options use the defaults of the installed version; no CNV correction is supplied.
+All scripts default to two threads and two permutation rounds. Clements accepts `--threads` and `--permutation-rounds`. Other options use MAGeCK defaults. The scripts do not apply CNV correction.
 
 [The comparison manifest](../metadata/mle_comparisons.tsv) lists sample labels and settings for the nine fits in the current scripts. [Design matrices](../metadata/mle_designs/) were generated directly from those scripts. Each selected count table is written in the same sample order.
 
-Lau's sample selection follows the recorded RRA comparison. OL_2 is not selected; the reason for this exclusion remains unresolved. Total normalization follows the earlier median-to-total fallback in a sparse count table. The label `Control` is retained without assuming that it denotes DMSO. This fit has no within-group replication and no separate T0 sample.
+Lau uses OL_1 versus Control, matching the recorded RRA comparison, with total normalization following the recorded fallback on sparse counts. The comparison has one sample per group and no separate T0. The OL_2 exclusion rationale and the identity of Control are not documented.
 
-Lin's shared drug coefficient assumes no treatment-by-day interaction. It is not a slope over time. A/B/C sample labels are not used to infer pairing or correlation between repeated cultures. The earlier separate-timepoint script is retained as `scripts/mle/previous/run_lin_mle.py` to reproduce that alternative configuration; it is not the current joint model. Timepoints from one screen must not be counted as independent recurrence evidence.
+Lin uses categorical day effects and one common drug coefficient across T9-T18. The model has no treatment-by-day interaction, replicate-block term or longitudinal covariance structure. The per-timepoint configuration is archived in `scripts/mle/previous/run_lin_mle.py`. For recurrence counting, multiple timepoints from the same screen contribute one unit.
 
-Tuano's B80 T5 and T17 are timepoints of the same model. They are fitted separately but are not independent screens for recurrence counting. The current Tuano script includes the identifier-parser fix: whitespace or double quotes in sgRNA/gene IDs are replaced by reversible, collision-free aliases for MAGeCK. The same handling is present in the Lin joint and Clements scripts. These aliases do not change counts or merge genes; derived CSVs restore original gene labels.
+Tuano's B80-T5 and B80-T17 are distinct cell lines and are fitted separately. Their recurrence-unit definition is separate from the MLE model. Tuano, Lin joint and Clements scripts use reversible aliases for whitespace or double quotes in guide/gene IDs to support the MAGeCK parser. Counts and gene groupings are preserved, and derived CSVs restore the original gene labels.
 
-Clements inputs were exported from the published knockout-screen supplements: MOESM4 for HeLa WT and MOESM5 for HeLa BRCA2KO. On the worksheet `sgRNA scores and read counts`, columns A/B provide sgRNA/Gene identifiers; N/P/O/Q become DMSO_1/DMSO_2/OL_1/OL_2. No supplied RRA statistic columns were used. Both saved exports contain 77,441 guides. The script records their reference SHA-256 hashes and validates integer-valued counts before fitting. The separate genotype fits do not test a genotype-by-drug interaction.
+Clements inputs come from the published knockout-screen supplements: MOESM4 for HeLa WT and MOESM5 for HeLa BRCA2KO. On the worksheet `sgRNA scores and read counts`, columns A/B provide sgRNA/Gene identifiers and N/P/O/Q map to DMSO_1/DMSO_2/OL_1/OL_2. Only individual-sample read counts enter MLE. Both exports contain 77,441 guides. Reference SHA-256 hashes identify the exports, and the script validates integer-valued counts before fitting. The separate genotype fits do not test a genotype-by-drug interaction.
 
 ## Outputs
 
@@ -52,15 +52,15 @@ The full `*.gene_summary.txt` retains both directions of effect. The scripts als
 - `treatment_vs_control|beta > 0`;
 - `treatment_vs_control|fdr < 0.05` (permutation FDR, not `wald-fdr`).
 
-`delta_beta` is the directly fitted treatment-versus-control coefficient. It is not a subtraction of two independently fitted effects. Clements also exports negative hits at beta < 0 and the same FDR threshold. FDR adjustment is within each fit, without adjustment across studies or comparisons.
+`delta_beta` is the directly fitted treatment-versus-control coefficient. Clements also exports negative hits at beta < 0 and the same FDR threshold. FDR is adjusted within each fit.
 
-No MLE recurrence list is produced here. `scripts/collect_hits.py` currently expects RRA columns. Inclusion in the cross-screen analysis requires the corresponding completed outputs and the study's recurrence-unit decision.
+`scripts/collect_hits.py` accepts RRA columns. MLE recurrence aggregation is not implemented.
 
 ## Version record
 
-[The script record](../provenance/mle_scripts.json) contains SHA-256 hashes of the Python files. These copies preserve the versions supplied on 15 October 2026; publishing them does not change their models or rerun MAGeCK.
+[The script record](../provenance/mle_scripts.json) lists current SHA-256 hashes, source-version hashes and validation records. The 17 October editorial update revises documentation and B80 cell-line labels; sample selection, design matrices and analysis parameters are unchanged.
 
-The Clements exports passed input validation and the original MAGeCK 0.5.9.5 count loader without losing guides or changing counts. A dry run checks input preparation, not model convergence. Numerical warnings observed during an MLE permutation stage still require review against the completed run and result table; the screenshot alone does not identify a particular study.
+Both Clements exports passed input validation and the MAGeCK 0.5.9.5 count loader with all guides and counts retained. Dry runs validate input preparation; convergence and numerical warnings require the completed fit and its log.
 
 ## Sources
 
@@ -68,4 +68,5 @@ The Clements exports passed input validation and the original MAGeCK 0.5.9.5 cou
 - [MAGeCK options](https://sourceforge.net/p/mageck/wiki/usage/)
 - [MAGeCK output columns](https://sourceforge.net/p/mageck/wiki/output/)
 - [Clements et al. (2020)](https://doi.org/10.1038/s41467-020-19961-w)
+- [Tuano et al. (2023)](https://doi.org/10.1186/s13059-023-02898-w)
 

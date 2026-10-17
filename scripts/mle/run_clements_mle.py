@@ -1,61 +1,32 @@
 #!/usr/bin/env python3
-"""Run separate MAGeCK MLE OL-versus-DMSO fits for Clements HeLa WT/BRCA2KO.
+"""Fit separate MAGeCK MLE models for Clements HeLa WT and BRCA2KO.
 
-Place this file beside:
-    Clements_HeLa_WT.count.txt
-    Clements_HeLa_BRCA2KO.count.txt
-Activate mageck_env, then run: python run_clements_mle.py
-
-Optional:
+Run beside Clements_HeLa_WT.count.txt and Clements_HeLa_BRCA2KO.count.txt:
+    python run_clements_mle.py
     python run_clements_mle.py --dry-run
     python run_clements_mle.py --datasets HeLa_BRCA2KO
     python run_clements_mle.py --data-dir /path/to/counts
     python run_clements_mle.py --permutation-rounds 10
 
-Both input files are checked BEFORE either MLE fit starts. Original files are
-never edited. Every invocation writes a new timestamped results directory.
-
-Design within EACH genotype (the two files are never pooled as replicates):
-    Samples  baseline  treatment_vs_control
-    DMSO_1   1         0
-    DMSO_2   1         0
-    OL_1     1         1
-    OL_2     1         1
-
-DMSO is the reference, not an assumed T0 measurement. Replicates are not averaged.
-No replicate-block term is inferred from labels 1/2. Positive beta indicates
-relative enrichment under OL; negative beta indicates relative depletion.
-These separate models do not test a genotype-by-drug interaction.
+Each genotype has two DMSO and two OL samples, with DMSO as the reference.
+The fits have no separate T0, replicate-block or genotype-by-drug interaction
+term. Positive beta indicates enrichment under OL. FDR is adjusted within each
+fit. Defaults: median normalization, two threads and two permutation rounds.
 
 Source: Clements et al. 2020, DOI 10.1038/s41467-020-19961-w.
-Previous conversion record: worksheet "sgRNA scores and read counts",
-A=sgRNA, B=Gene, N=DMSO_1, P=DMSO_2, O=OL_1, Q=OL_2.
-MOESM4 -> HeLa_WT; MOESM5 -> HeLa_BRCA2KO. Only published individual
-sample read counts N:Q were used, not the supplied RRA/statistic columns C:M.
-The conversion retained all 77,441 guides per table without averaging,
-normalizing or filtering. Reference hashes below identify the saved exports
-validated while preparing this script; a different hash does not by itself
-mean the data are invalid. Integer checks alone cannot prove raw-count
-provenance or detect a swapped biological sample label.
+MOESM4 supplies HeLa WT and MOESM5 supplies BRCA2KO. On the worksheet
+"sgRNA scores and read counts", A/B map to sgRNA/Gene and N/P/O/Q map to
+DMSO_1/DMSO_2/OL_1/OL_2. Each export retains all 77,441 guides and raw counts.
+Reference hashes identify the recorded exports; input validation checks file
+structure and count values, not the experimental identity of the samples.
 
-Excel-style integer values such as 10.0 or 1e3 are converted exactly to integers.
-Fractional, missing, negative and nonfinite counts are rejected, never rounded
-or filled. Identifiers containing whitespace or double quotes receive
-collision-free temporary aliases for MAGeCK 0.5.9.5's whitespace-based parser.
-All rows, counts and gene groupings are retained. Derived CSVs use original gene
-IDs; the engine's own files are unchanged. Identifier maps are saved per dataset.
+Both inputs are validated before fitting. Integer-valued Excel exports are
+accepted; fractional, missing, negative and nonfinite counts are rejected.
+Reversible aliases handle whitespace/quotes in guide and gene IDs. Derived CSVs
+restore original IDs; maps and engine outputs are retained for each dataset.
+Every run writes a new timestamped results directory.
 
-Defaults match the earlier scripts: median normalization, 2 threads,
-2 permutation rounds. MAGeCK documentation suggests 10 permutation rounds for
-a larger null distribution (slower); --permutation-rounds can change this.
-Hit files use treatment_vs_control|fdr (permutation FDR), not wald-fdr.
-FDR is adjusted within each fit, not across the two datasets.
-
-Only Python's standard library and an existing MAGeCK installation are needed.
-Official documentation:
-    https://sourceforge.net/p/mageck/wiki/input/
-    https://sourceforge.net/p/mageck/wiki/usage/
-    https://sourceforge.net/p/mageck/wiki/output/
+Documentation: https://sourceforge.net/p/mageck/wiki/usage/
 """
 
 import argparse
@@ -290,7 +261,7 @@ def summarize(prefix, dataset, reverse_genes):
     for row in results:
         beta = result_number(row[f"{EFFECT}|beta"])
         fdr = result_number(row[f"{EFFECT}|fdr"])
-        # This is the directly fitted OL-vs-DMSO contrast, not two betas subtracted.
+        # Directly fitted OL-versus-DMSO coefficient.
         row["delta_beta"] = beta
         row["positive_selection"] = math.isfinite(beta) and beta > 0
         row["negative_selection"] = math.isfinite(beta) and beta < 0
@@ -344,7 +315,7 @@ def main():
     print("Script version:", SCRIPT_VERSION, flush=True)
     prepared = {}
 
-    # Validate ALL requested source files before preparing or fitting any model.
+    # Validate all inputs before fitting.
     for dataset in names:
         settings = DATASETS[dataset]
         path = data_dir / settings["file"]
@@ -458,7 +429,7 @@ def main():
     (out / "run_metadata.json").write_text(
         json.dumps(metadata, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
     )
-    # From here on, both generated inputs have passed MAGeCK's tokenization check.
+    # Both selected inputs passed the MAGeCK parser check.
     del prepared
     if args.dry_run:
         print("Dry run complete. Inputs passed validation; MAGeCK was not run.",

@@ -1,7 +1,7 @@
 # Input data
 
-Place inputs in study directories matching `metadata/studies.tsv` and `metadata/comparisons.tsv`. Retain original files and record any formatting changes.
+Input paths follow the study directories in `metadata/studies.tsv` and `metadata/comparisons.tsv`. Conversion records describe any changes to the original file format.
 
-Author-supplied sgRNA count tables enter at `mageck test`. They do not require a `mageck count` step.
+Existing raw sgRNA count tables enter directly at `mageck test` or `mageck mle`.
 
-Input files have not yet been added. This directory is excluded from Git except for this README.
+Input files are not included. This directory is excluded from Git except for this README.

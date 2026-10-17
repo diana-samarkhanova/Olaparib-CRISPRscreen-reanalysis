@@ -1,28 +1,21 @@
 #!/usr/bin/env python3
-"""Fit one joint MAGeCK MLE model to all 25 Lin OLA/DMSO3 samples.
+"""Fit a joint MAGeCK MLE model to the Lin OLA/DMSO3 screen.
 
-Place this script beside lin_counts_OLA_DMSO3.count.txt and run:
+Run beside lin_counts_OLA_DMSO3.count.txt:
     python run_lin_mle_joint.py
-Optional: python run_lin_mle_joint.py --dry-run
+    python run_lin_mle_joint.py --dry-run
 
-Model: guide baseline + categorical day effects + one shared OLA-versus-DMSO
-effect. The T9/T12/T15/T18 indicators apply to both DMSO and OLA samples.
-All three T0 samples enter once, with only the baseline column set to one.
+All 25 samples enter one model: three T0 samples, categorical effects for
+T9/T12/T15/T18, and a shared OLA-versus-DMSO effect. The day indicators apply to
+both treatment and control samples. T0 rows contain only the baseline term.
 
-The treatment_vs_control coefficient is a common, day-adjusted drug effect.
-It assumes no treatment-by-day interactions; it is not a time slope or a
-test of how the drug effect changes over time. All sample columns stay
-separate. No replicate pairing or longitudinal covariance is inferred from
-A/B/C labels. Shared biological lineages need metadata-based assessment.
+The drug coefficient is constant across days. The model has no treatment-by-day
+interaction, replicate block or longitudinal covariance term. Sample counts
+remain separate. Per-timepoint fits are archived in scripts/mle/previous/.
 
-No averaging of counts, previously fitted betas, p-values or FDR values is
-performed. This model uses one common drug effect per gene for the Lin screen.
-The earlier per-timepoint analyses answer a different question and remain
-useful for checking the direction and timing of effects.
-
-Temporary identifier aliases handle MAGeCK 0.5.9.5's whitespace parser.
-All guides and counts are retained. Ranked CSV files contain original gene
-labels; identifier_map.csv records any changes in the engine input.
+Whitespace and quote characters in guide/gene IDs receive reversible aliases
+for the MAGeCK parser. Counts and guide membership are preserved; derived CSVs
+restore the original gene IDs.
 """
 
 import argparse
@@ -62,7 +55,7 @@ TIMEPOINTS = {
 }
 NORM_METHOD = "median"
 THREADS = 2
-PERMUTATION_ROUNDS = 2  # Retains the MAGeCK default used in the earlier scripts.
+PERMUTATION_ROUNDS = 2  # MAGeCK default.
 FDR_THRESHOLD = 0.05
 EFFECT = "treatment_vs_control"
 SCRIPT_VERSION = "2026-10-15-lin-joint-common-effect"

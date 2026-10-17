@@ -1,6 +1,6 @@
 {
-  "snapshot_date": "2026-10-15",
-  "description": "Python scripts copied byte-for-byte from the versions supplied for MLE reanalysis. Static design matrices were generated from their make_design functions.",
+  "snapshot_date": "2026-10-17",
+  "description": "MLE scripts and design matrices. Current checksums reflect editorial revisions; source checksums identify the 15 October versions. Analysis parameters and design matrices are unchanged. B80-T5/B80-T17 descriptive metadata identifies distinct cell lines.",
   "target_environment": {
     "mageck": "0.5.9.5",
     "python": "3.10",
@@ -13,43 +13,53 @@
       "study_id": "lau",
       "path": "scripts/mle/run_lau_mle.py",
       "role": "current_configuration",
-      "sha256": "bd7fd1d031954fab574890b84ce025db89262192509106e37593d13e0c350b03",
-      "script_version": null
+      "sha256": "abf1aa6317844da587deb3eae34119a69e2e5b148007f38cf9793d92d7211b57",
+      "script_version": null,
+      "source_sha256": "bd7fd1d031954fab574890b84ce025db89262192509106e37593d13e0c350b03"
     },
     {
       "study_id": "lin",
       "path": "scripts/mle/run_lin_mle_joint.py",
       "role": "current_configuration",
-      "sha256": "d40f9fb07b7cf8418345424787ef7afff1e414bd408706c4c92ad442b9070e43",
-      "script_version": "2026-10-15-lin-joint-common-effect"
+      "sha256": "3aeca4435ba23f1edea2985ed3508a8e3de3c0af08d54cd258cbf4b2f1da6eda",
+      "script_version": "2026-10-15-lin-joint-common-effect",
+      "source_sha256": "d40f9fb07b7cf8418345424787ef7afff1e414bd408706c4c92ad442b9070e43"
     },
     {
       "study_id": "tuano",
       "path": "scripts/mle/run_tuano_mle.py",
       "role": "current_configuration",
-      "sha256": "c2aeb9c177b6a7fb1a0dc89ec1e212676ff64448d344c2ab7592677c7630ad22",
-      "script_version": "2026-10-15-mle-identifier-fix"
+      "sha256": "e64ad592a41a814da4f74216426a7b20e7e35faf34eb03173667b8c6729a3c51",
+      "script_version": "2026-10-15-mle-identifier-fix",
+      "source_sha256": "c2aeb9c177b6a7fb1a0dc89ec1e212676ff64448d344c2ab7592677c7630ad22"
     },
     {
       "study_id": "clements",
       "path": "scripts/mle/run_clements_mle.py",
       "role": "current_configuration",
-      "sha256": "6b8719c66dad9300071f2f271a31d1b4cd93c88da85da4a272fc47fa50da9c99",
-      "script_version": "2026-10-15-clements-v1"
+      "sha256": "cd4fb7ae86e79c75ac348d1723081062be7b60edd385f5e8677c945ee436dee0",
+      "script_version": "2026-10-15-clements-v1",
+      "source_sha256": "6b8719c66dad9300071f2f271a31d1b4cd93c88da85da4a272fc47fa50da9c99"
     },
     {
       "study_id": "lin",
       "path": "scripts/mle/previous/run_lin_mle.py",
       "role": "previous_per_timepoint_configuration",
-      "sha256": "8612e6111a5ded671e07f00bd10045c66dc7e8cac47a73e87887b715a95b6ad4",
-      "script_version": null
+      "sha256": "3426346445a43d69aeba3e6f2ceceb3c5cf0e9fdc9bffae837e5ae105f8a8fb7",
+      "script_version": null,
+      "source_sha256": "8612e6111a5ded671e07f00bd10045c66dc7e8cac47a73e87887b715a95b6ad4"
     }
   ],
   "current_comparisons": 9,
-  "run_evidence": "Full run logs and completed MLE result tables have not been archived in this repository. This snapshot does not establish which outputs entered the manuscript.",
+  "run_evidence": "Full MLE run logs and result tables are not archived. The mapping to manuscript outputs is unverified.",
   "validation": [
-    "Five Python files parse and match the supplied source bytes.",
-    "Nine current design matrices have unique sample rows, full column rank and the declared treatment contrast.",
-    "Clements input preparation and the original MAGeCK 0.5.9.5 count loader were previously checked on both 77441-guide exports; no MLE fit was performed for this upload."
-  ]
+    "Python syntax and AST comparison confirm unchanged computation and parameters; only docstrings/comments and B80 descriptive metadata differ from the source snapshot.",
+    "All nine current design matrices match the script-generated designs.",
+    "Command arguments, sample selections and decision/status fields are unchanged.",
+    "Both 77441-guide Clements exports previously passed input validation and the MAGeCK 0.5.9.5 loader with counts and guide membership retained. Full study fits were not rerun for this revision."
+  ],
+  "source_snapshot": {
+    "date": "2026-10-15",
+    "commit": "0da20c45d7c9d51c12bf4137860dd36f538ce28f"
+  }
 }
