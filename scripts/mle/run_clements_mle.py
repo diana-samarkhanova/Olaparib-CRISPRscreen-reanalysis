@@ -97,7 +97,41 @@ NORM_METHOD = "median"
 THREADS = 2
 PERMUTATION_ROUNDS = 2
 FDR_THRESHOLD = 0.05
-SCRIPT_VERSION = "2026-10-15-clements-v1"
+SCRIPT_VERSION = "2026-10-17-median-checked"
+
+
+def require_median_counts(qc):
+    """Reject the automatic total fallback used by MAGeCK 0.5.9.5."""
+    if NORM_METHOD != "median":
+        raise ValueError("This workflow requires NORM_METHOD = 'median'.")
+    blocked = [f"{item['sample']} ({item['zero_percent']:.2f}% zeros)"
+               for item in qc if item.get("selected", True)
+               and 100 * item["zero_count_guides"] > 45 * item["guides"]]
+    if blocked:
+        raise ValueError(
+            "Median normalization cannot be accepted: MAGeCK 0.5.9.5 switches "
+            "to total when any selected sample has >45% zero-count guides. "
+            + "; ".join(blocked) + ". No MLE fit was run. Review the count table "
+            "and normalization choice; do not remove zero rows just to force median."
+        )
+
+
+def verify_median_log(prefix):
+    """Check the engine log before exporting hits; retain evidence per fit."""
+    log_path = Path(str(prefix) + ".log")
+    text = log_path.read_text(encoding="utf-8", errors="replace")
+    fallback = "Switch to total read count normalization." in text
+    factors = [line for line in text.splitlines() if "Final size factor:" in line]
+    verified = bool(factors) and not fallback
+    report = {"requested": NORM_METHOD, "log": str(log_path),
+              "median_verified_from_log": verified, "total_fallback": fallback,
+              "final_size_factor_log_lines": factors}
+    Path(str(prefix) + ".normalization.json").write_text(
+        json.dumps(report, indent=2) + "\n", encoding="utf-8"
+    )
+    if not verified:
+        raise RuntimeError(f"Median normalization was not verified in {log_path}. "
+                           "This run must not be used as a median-normalized result.")
 
 
 def positive_int(value):
@@ -460,6 +494,7 @@ def main():
     )
     # From here on, both generated inputs have passed MAGeCK's tokenization check.
     del prepared
+    require_median_counts(all_qc)
     if args.dry_run:
         print("Dry run complete. Inputs passed validation; MAGeCK was not run.",
               flush=True)
@@ -470,6 +505,7 @@ def main():
     for dataset, prefix, command, reverse_genes in jobs:
         print("\nRunning", dataset, ":", shlex.join(command), flush=True)
         subprocess.run(command, check=True)
+        verify_median_log(prefix)
         summaries.append(summarize(prefix, dataset, reverse_genes))
         # Save completed work even if a later MAGeCK fit fails.
         with summary_path.open("w", encoding="utf-8", newline="") as handle:

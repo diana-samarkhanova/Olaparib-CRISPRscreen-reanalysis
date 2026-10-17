@@ -6,6 +6,8 @@ if [[ $# -ne 1 ]]; then
   printf 'Usage: bash %s /absolute/path/to/5FANG\n' "$0" >&2
   exit 2
 fi
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/median_normalization.sh"
 cd -- "$1"
 command -v mageck >/dev/null || { printf 'Activate the verified MAGeCK environment first.\n' >&2; exit 127; }
 
@@ -16,10 +18,12 @@ if [[ -e results/Olap5_vs_DMSO.gene_summary.txt ]]; then
 fi
 mkdir -p -- results
 mageck test \
+--norm-method median \
 -k count/all.count.txt \
 -t Olap_5.1,Olap_5.2 \
 -c DMSO.1,DMSO.2 \
 -n results/Olap5_vs_DMSO
+require_median_log "results/Olap5_vs_DMSO.log"
 
 # fang_test_02
 if [[ -e results/Olap10_vs_DMSO.gene_summary.txt ]]; then
@@ -28,10 +32,12 @@ if [[ -e results/Olap10_vs_DMSO.gene_summary.txt ]]; then
 fi
 mkdir -p -- results
 mageck test \
+--norm-method median \
 -k count/all.count.txt \
 -t Olap_10.1,Olap_10.2 \
 -c DMSO.1,DMSO.2 \
 -n results/Olap10_vs_DMSO
+require_median_log "results/Olap10_vs_DMSO.log"
 
 # fang_test_03
 if [[ -e results/Olap_all_vs_DMSO.gene_summary.txt ]]; then
@@ -40,7 +46,9 @@ if [[ -e results/Olap_all_vs_DMSO.gene_summary.txt ]]; then
 fi
 mkdir -p -- results
 mageck test \
+--norm-method median \
 -k count/all.count.txt \
 -t Olap_5.1,Olap_5.2,Olap_10.1,Olap_10.2 \
 -c DMSO.1,DMSO.2 \
 -n results/Olap_all_vs_DMSO
+require_median_log "results/Olap_all_vs_DMSO.log"

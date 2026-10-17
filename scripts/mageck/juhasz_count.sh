@@ -16,6 +16,7 @@ if [[ -e counts/GeCKO_A_OL_VS_DMSO.count.txt ]]; then
 fi
 mkdir -p -- counts
 mageck count \
+--norm-method median \
 -l library/Human_GeCKOv2_Library_A_3_mageck.csv \
 --sample-label A_OL_1,A_OL_2,A_DMSO_1,A_DMSO_2 \
 --fastq \
@@ -32,6 +33,7 @@ if [[ -e counts/GeCKO_B_OL_VS_DMSO.count.txt ]]; then
 fi
 mkdir -p -- counts
 mageck count \
+--norm-method median \
 -l library/Human_GeCKOv2_Library_B_1_mageck.csv \
 --sample-label B_OL_1,B_OL_2,B_DMSO_1,B_DMSO_2 \
 --fastq \

@@ -34,11 +34,46 @@ COUNT_FILES = ["lau_counts.count.txt"]
 BASELINE_SAMPLES = []  # No separate baseline column in the supplied Lau header.
 CONTROL_SAMPLES = ["Control"]
 TREATMENT_SAMPLES = ["OL_1"]
-NORM_METHOD = "total"  # The earlier Lau RRA fell back from median to total.
+NORM_METHOD = "median"
 THREADS = 2
 PERMUTATION_ROUNDS = 2  # Explicit MAGeCK default; unchanged from the template.
 FDR_THRESHOLD = 0.05
 EFFECT = "treatment_vs_control"
+SCRIPT_VERSION = "2026-10-17-median-checked"
+
+
+def require_median_counts(qc):
+    """Reject the automatic total fallback used by MAGeCK 0.5.9.5."""
+    if NORM_METHOD != "median":
+        raise ValueError("This workflow requires NORM_METHOD = 'median'.")
+    blocked = [f"{item['sample']} ({item['zero_percent']:.2f}% zeros)"
+               for item in qc if item.get("selected", True)
+               and 100 * item["zero_count_guides"] > 45 * item["guides"]]
+    if blocked:
+        raise ValueError(
+            "Median normalization cannot be accepted: MAGeCK 0.5.9.5 switches "
+            "to total when any selected sample has >45% zero-count guides. "
+            + "; ".join(blocked) + ". No MLE fit was run. Review the count table "
+            "and normalization choice; do not remove zero rows just to force median."
+        )
+
+
+def verify_median_log(prefix):
+    """Check the engine log before exporting hits; retain evidence per fit."""
+    log_path = Path(str(prefix) + ".log")
+    text = log_path.read_text(encoding="utf-8", errors="replace")
+    fallback = "Switch to total read count normalization." in text
+    factors = [line for line in text.splitlines() if "Final size factor:" in line]
+    verified = bool(factors) and not fallback
+    report = {"requested": NORM_METHOD, "log": str(log_path),
+              "median_verified_from_log": verified, "total_fallback": fallback,
+              "final_size_factor_log_lines": factors}
+    Path(str(prefix) + ".normalization.json").write_text(
+        json.dumps(report, indent=2) + "\n", encoding="utf-8"
+    )
+    if not verified:
+        raise RuntimeError(f"Median normalization was not verified in {log_path}. "
+                           "This run must not be used as a median-normalized result.")
 
 
 def make_design():
@@ -182,7 +217,7 @@ def main():
                    "-d", str(design_file), "--norm-method", NORM_METHOD,
                    "--threads", str(THREADS), "--permutation-round", str(PERMUTATION_ROUNDS),
                    "-n", str(prefix)]
-        metadata = {"input": str(count_file),
+        metadata = {"script_version": SCRIPT_VERSION, "input": str(count_file),
                     "input_sha256": hashlib.sha256(count_file.read_bytes()).hexdigest(),
                     "baseline_samples": BASELINE_SAMPLES, "control_samples": CONTROL_SAMPLES,
                     "treatment_samples": TREATMENT_SAMPLES, "normalization": NORM_METHOD,
@@ -200,10 +235,12 @@ def main():
         for row in design_rows:
             print("\t".join(map(str, row)))
         print("\nCommand:", shlex.join(command))
+        require_median_counts(qc)
         if args.dry_run:
             print("\nDry run finished. Inputs saved to:", out)
             continue
         subprocess.run(command, check=True)
+        verify_median_log(prefix)
         summarize(prefix)
         print("\nResults saved to:", out)
 

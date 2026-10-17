@@ -6,6 +6,8 @@ if [[ $# -ne 1 ]]; then
   printf 'Usage: bash %s /absolute/path/to/4JUHASZ\n' "$0" >&2
   exit 2
 fi
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/median_normalization.sh"
 cd -- "$1"
 command -v mageck >/dev/null || { printf 'Activate the verified MAGeCK environment first.\n' >&2; exit 127; }
 
@@ -16,10 +18,12 @@ if [[ -e counts/GeCKO_A_OL_vs_DMSO_test.gene_summary.txt ]]; then
 fi
 mkdir -p -- counts
 mageck test \
+--norm-method median \
 -k counts/GeCKO_A_OL_VS_DMSO.count.txt \
 -t A_OL_1,A_OL_2 \
 -c A_DMSO_1,A_DMSO_2 \
 -n counts/GeCKO_A_OL_vs_DMSO_test
+require_median_log "counts/GeCKO_A_OL_vs_DMSO_test.log"
 
 # juhasz_test_02
 if [[ -e counts/GeCKO_B_OL_vs_DMSO_test.gene_summary.txt ]]; then
@@ -28,7 +32,9 @@ if [[ -e counts/GeCKO_B_OL_vs_DMSO_test.gene_summary.txt ]]; then
 fi
 mkdir -p -- counts
 mageck test \
+--norm-method median \
 -k counts/GeCKO_B_OL_VS_DMSO.count.txt \
 -t B_OL_1,B_OL_2 \
 -c B_DMSO_1,B_DMSO_2 \
 -n counts/GeCKO_B_OL_vs_DMSO_test
+require_median_log "counts/GeCKO_B_OL_vs_DMSO_test.log"

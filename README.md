@@ -24,7 +24,9 @@ Count tables contain sgRNA read counts, not preselected gene lists. Sources, fil
 | `docs/` | Dataset questions and Reactome methods |
 | `tests/` | Tests for hit selection and recurrence counting |
 
-The shell scripts in `scripts/mageck/` preserve the original arguments and output prefixes. Each takes the study working directory as its only argument. Lin's final count command is used; the two earlier versions remain in the command record.
+The shell scripts in `scripts/mageck/` preserve sample selections and output prefixes, and now explicitly request `--norm-method median`. Each takes the study working directory as its only argument. Keep `median_normalization.sh` beside the RRA test scripts. Lin's final count command is used; the two earlier versions remain in the command record. Original commands in `provenance/command_records.json` remain unchanged as historical evidence.
+
+All current RRA and MLE analysis scripts request median normalization. MAGeCK can automatically fall back to total on sparse counts, so the scripts reject that fallback; MLE also checks sparsity before fitting. The 17 October 2026 update changes Lau MLE from total to median and requires a new accepted run before replacing its results. It does not establish that earlier outputs used median. See [normalization policy and rerun requirements](docs/normalization.md).
 
 ## Running RRA
 
@@ -78,5 +80,5 @@ The enrichment settings and module-assignment tables are awaiting the original e
 python3 -m unittest discover -s tests -v
 ```
 
-Tests use synthetic data to check positive-hit selection, recurrence counting and input validation. Study datasets have not yet been rerun here.
+Tests use synthetic data to check positive-hit selection, recurrence counting, input validation and rejection of normalization fallback. Study datasets have not yet been rerun here.
 
